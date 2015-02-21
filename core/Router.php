@@ -1,11 +1,13 @@
 <?php
-class RoutingCore {
+namespace Core;
+
+class Router {
 	const GET_FORMAT = 'get';
 	public $routeKey = 'r';
 	public $controller = 'static';
 	public $action = 'index';
 
-	public function specifiesRequested() {
+	public function routing() {
 		$GLOBALS['httpRequest']->normalizeRequest();
 
 		if (self::GET_FORMAT == 'get')
@@ -20,20 +22,20 @@ class RoutingCore {
 		} else {
 			$pattern = '/^([\w]+)\/([\w]+)$/iu';
 			if (!preg_match($pattern, $route, $matches))
-				throw new Exception('The route is not found');
+				die('The route is not found');
 		}
 
-		$this->controller = ucfirst($matches[1]).'Controller';
+		$this->controller = 'Controller\\'.ucfirst($matches[1]).'Controller';
 		$this->action = $matches[2];
 
-		if ( class_exists($this->controller) )
-				$a = new $this->controller;
-		else
-			throw new Exception('The controller is not found.');
+		if ( class_exists($this->controller) ) {
+			$a = new $this->controller;
+		}else
+			die('The controller is not found.');
 		if ( method_exists($a, $this->action) )
 			call_user_func(array($a, $this->action));
 		else
-			throw new Exception('The action is not found.');
+			die('The action is not found.');
 	}
 }
 ?>

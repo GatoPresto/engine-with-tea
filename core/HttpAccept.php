@@ -1,5 +1,7 @@
 <?php
-class HttpAcceptCore
+namespace Core;
+
+class HttpAccept
 {
     /**
      * Array of types and their associated parameters, extensions, and quality

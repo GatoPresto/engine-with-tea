@@ -1,5 +1,7 @@
 <?php
-class HttpRequestCore {
+namespace Core;
+
+class HttpRequest {
 	/*
 	 * Normalizes the data request.
 	 * This method remove slashes in query data, if get_magic_quotes_gpc () returns true.
