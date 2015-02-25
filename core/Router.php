@@ -270,27 +270,19 @@ class Router {
 		return "`^$route$`u";
 	}
 
-	/*
+	/**
 	 * Route
 	 */
 	public function route() {
 		$route = $this->match() or die('Incorrect route');
 
 		$pattern = '/^([\w]+)\#([\w]+)$/iu';
-		if ( !preg_match($pattern, $route['target'], $matches) )
-			die('Incorrect route');
+		preg_match($pattern, $route['target'], $matches) or die('Incorrect route');
 
 		$controllerName = 'Controller\\'.ucfirst($matches[1]).'Controller';
 		$actionName = $matches[2];
 
-		if ( class_exists($controllerName) )
-			$controller = new $controllerName;
-		else
-			die('The controller is not found.');
-
-		if ( method_exists($controller, $actionName) )
-			call_user_func(array($controller, $actionName));
-		else
-			die('The action is not found.');
+		class_exists($controllerName) or die('The controller is not found.');
+		$controller = new $controllerName($actionName);
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 namespace Controller;
 
-class StaticController {
+class StaticController extends AppController {
 	public function index() {
 		echo 'Index page';
 	}
