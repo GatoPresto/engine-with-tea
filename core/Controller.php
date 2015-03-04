@@ -35,25 +35,35 @@ class Controller {
 			method_exists($this, $args) or die('Filter method is not exists');
 			$this->$args();
 		} else {
-			( isset($args[0]) && method_exists($this, $args[0]) ) or die('Filter method is not exists');
+            $aux = function($f) {
+                ( isset($f[0]) && method_exists($this, $f[0]) ) or die('Filter method is not exists');
 
-			// only and except situation
-			if ( isset($args['only']) ) {
-				if ( !is_array($args['only']) && $this->actionName != $args['only'] )
-					return;
-				elseif ( is_array($args['only']) && !in_array($this->actionName, $args['only']) )
-					return;
-			} elseif ( isset($args['except']) ) {
-				if ( !is_array($args['except']) && $this->actionName == $args['except'] )
-					return;
-				elseif ( is_array($args['except']) && in_array($this->actionName, $args['except']) )
-					 return;
-			}
+                // only and except situation
+                if ( isset($f['only']) ) {
+                    if ( is_string($f['only']) && $this->actionName != $f['only'] )
+                        return;
+                    elseif ( is_array($f['only']) && !in_array($this->actionName, $f['only']) )
+                        return;
+                } elseif ( isset($f['except']) ) {
+                    if ( is_string($f['except']) && $this->actionName == $f['except'] )
+                        return;
+                    elseif ( is_array($f['except']) && in_array($this->actionName, $f['except']) )
+                        return;
+                }
 
-			if ( !isset($args[1]) )
-				call_user_func(array($this, $args[0]));
-			else
-				call_user_func(array($this, $args[0]), $args[1]);
+                if ( !isset($f[1]) )
+                    call_user_func(array($this, $f[0]));
+                else
+                    call_user_func(array($this, $f[0]), $f[1]);
+            };
+
+            if ( isset($args[0]) && is_string($args[0]) ) {
+                $aux($args);
+            } elseif ( isset($args[0]) && is_array($args[0]) ) {
+                foreach ( $args as $key => $f ) {
+                    $aux($f);
+                }
+            }
 		}
 	}
 }
