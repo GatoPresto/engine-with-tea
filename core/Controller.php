@@ -6,17 +6,19 @@ namespace Core;
  */
 class Controller {
     protected $twig;
-    protected $aroundAction = NULL;
-    protected $beforeAction = NULL;
-    protected $afterAction = NULL;
-    protected $actionName = NULL;
+    public $layout;
+    public $view;
+    protected $aroundAction;
+    protected $beforeAction;
+    protected $afterAction;
+    protected $actionName;
 
 	function __construct($actionName) {
-        // twig
-        $twigLoader = new \Twig_Loader_Filesystem('app/views/');
-        $this->twig = new \Twig_Environment($twigLoader);
+        $this->actionName = $actionName;
+        $this->template_init($this->layout, 'layouts/app.twig');
+        $this->template_init($this->view, "{$GLOBALS['route']['controller']}/{$GLOBALS['route']['action']}.twig");
+        $this->twig_init();
 
-		$this->actionName = $actionName;
 		method_exists($this, $actionName) or die('The action is not found.');
 
 		if ( !is_null($this->aroundAction) ) {
@@ -77,7 +79,56 @@ class Controller {
 
     private function render() {
         $this->twig->addGlobal('global', $GLOBALS);
-        echo $this->twig->render("{$GLOBALS['route']['controller']}/{$GLOBALS['route']['action']}.twig");
+        $this->twig->addGlobal('self', $this);
+
+        if ( $this->view )
+            echo $this->twig->render($this->view);
+        else
+            echo $this->twig->render($this->layout);
+    }
+
+    private function twig_init() {
+        $twigLoader = new \Twig_Loader_Filesystem('app/views/');
+        $this->twig = new \Twig_Environment($twigLoader);
+    }
+
+    private function template_init(&$obj, $default = NULL) {
+        if ( $obj === NULL ) {
+            $obj = $default;
+        } elseif ( is_array($obj) ) {
+            $aux = function(&$obj, $v, $default) {
+                // only and except situation
+                if ( isset($v['only']) ) {
+                    if ( is_string($v['only']) && $this->actionName != $v['only'] ) {
+                        $obj = $default;
+                        return;
+                    } elseif ( is_array($v['only']) && !in_array($this->actionName, $v['only']) ) {
+                        $obj = $default;
+                        return;
+                    }
+                } elseif ( isset($v['except']) ) {
+                    if ( is_string($v['except']) && $this->actionName == $v['except'] ) {
+                        $obj = $default;
+                        return;
+                    } elseif ( is_array($v['except']) && in_array($this->actionName, $v['except']) ) {
+                        $obj = $default;
+                        return;
+                    }
+                }
+
+                $obj = $v[0];
+            };
+
+            if ( isset($obj[0]) && is_string($obj[0]) ) {
+                $aux($obj, $obj, $default);
+            } elseif ( isset($obj[0]) && is_array($obj[0]) ) {
+                foreach ( $obj as $key => $v ) {
+                    $aux($obj, $v, $default);
+                }
+            } elseif ( isset($obj[0]) && is_bool($obj[0]) ) {
+                $obj = ( $obj[0] ) ? $default : false;
+            }
+        }
     }
 }
 ?>
