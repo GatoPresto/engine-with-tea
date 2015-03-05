@@ -274,15 +274,18 @@ class Router {
 	 * Route
 	 */
 	public function route() {
-		$route = $this->match() or die('Incorrect route');
+		global $route;
+        $route = $this->match() or die('Incorrect route');
 
 		$pattern = '/^([\w]+)\#([\w]+)$/iu';
 		preg_match($pattern, $route['target'], $matches) or die('Incorrect route');
 
+        $route['controller'] = $matches[1];
+        $route['action'] = $matches[2];
+
 		$controllerName = 'Controller\\'.ucfirst($matches[1]).'Controller';
-		$actionName = $matches[2];
 
 		class_exists($controllerName) or die('The controller is not found.');
-		$controller = new $controllerName($actionName);
+		new $controllerName($route['action']);
 	}
 }

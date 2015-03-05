@@ -5,12 +5,17 @@ namespace Core;
  * Controller is the base class for classes containing controller logic.
  */
 class Controller {
-	public $aroundAction = NULL;
-	public $beforeAction = NULL;
-	public $afterAction = NULL;
-	public $actionName = NULL;
+    protected $twig;
+    protected $aroundAction = NULL;
+    protected $beforeAction = NULL;
+    protected $afterAction = NULL;
+    protected $actionName = NULL;
 
 	function __construct($actionName) {
+        // twig
+        $twigLoader = new \Twig_Loader_Filesystem('app/views/');
+        $this->twig = new \Twig_Environment($twigLoader);
+
 		$this->actionName = $actionName;
 		method_exists($this, $actionName) or die('The action is not found.');
 
@@ -25,6 +30,9 @@ class Controller {
 			if ( !is_null($this->afterAction) )
 				$this->filter($this->afterAction);
 		}
+
+        if ( $_SERVER['REQUEST_METHOD'] == 'GET' )
+            $this->render();
 	}
 
 	/**
@@ -66,5 +74,10 @@ class Controller {
             }
 		}
 	}
+
+    private function render() {
+        $this->twig->addGlobal('global', $GLOBALS);
+        echo $this->twig->render("{$GLOBALS['route']['controller']}/{$GLOBALS['route']['action']}.twig");
+    }
 }
 ?>

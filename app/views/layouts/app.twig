@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}
+            <meta charset="UTF-8">
+            <title>{% block title %}{% endblock %} - Engine with Tea</title>
+
+            <link rel="stylesheet" href="{{ constant('BASE_URL') }}/assets/stylesheets/app.css">
+        {% endblock %}
+    </head>
+
+    <body>
+        <div id="content">{% block content %}{% endblock %}</div>
+    </body>
+</html>

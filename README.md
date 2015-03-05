@@ -1,8 +1,8 @@
 # Engine with Tea
 
-My PHP framework for writing projects.
+PHP framework
 
-For [contact me](http://gatopresto.com).
+[Contact me](http://gatopresto.com)
 
 ## License
 

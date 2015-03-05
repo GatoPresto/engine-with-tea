@@ -1,0 +1,45 @@
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, cite, code, em, img, small, strike, strong, sub, sup, b, u, i, dl, dt, dd, ol, ul, li, fieldset, form, button, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, embed, figure, figcaption, footer, header, hgroup, nav, section, summary, time, mark, audio, video {
+	border: 0 none;
+	margin: 0;
+	padding: 0;
+	vertical-align: baseline;
+}
+
+html, body {
+	height: 100%;
+}
+
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+a { text-decoration: none; }
+a, img, input, textarea {
+	outline: none;
+	outline: expression(hideFocus="true");
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-rendering: optimizelegibility;
+}
+
+input[type="checkbox"] {
+	cursor: pointer;
+}
+
+body {
+	font: 15px/19px helvetica;
+}
+
+h1 {
+	font-size: 30px;
+	line-height: 34px;
+	margin-bottom: 10px;
+}
+
+#content {
+	width: 800px;
+	margin: 0 auto;
+	padding: 20px 0;
+}
