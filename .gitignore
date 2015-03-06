@@ -3,3 +3,5 @@
 *.sublime-workspace
 other/
 .idea/
+composer.lock
+.DS_Store
