@@ -2,6 +2,7 @@
     "require": {
         "php": ">=5.4.0",
         "symfony/yaml": "2.6.4",
-	    "twig/twig": "1.18.0"
+	    "twig/twig": "1.18.0",
+	    "php-activerecord/php-activerecord": "1.1.2"
     }
 }

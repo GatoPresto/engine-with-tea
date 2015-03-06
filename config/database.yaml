@@ -1,0 +1,8 @@
+# connections:
+#   development: mysql://username:password@localhost/production
+#   production: mysql://username:password@localhost/production
+#   test: mysql://username:password@localhost/production
+#   pgsql: pgsql://username:password@localhost/development
+#   sqlite: sqlite://my_database.db
+#   oci: oci://username:passsword@localhost/xe
+# default: development
