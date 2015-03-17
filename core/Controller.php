@@ -80,6 +80,9 @@ class Controller {
     private function render() {
         $this->twig->addGlobal('global', $GLOBALS);
         $this->twig->addGlobal('self', $this);
+        $this->twig->addGlobal('router', $GLOBALS['router']);
+        $this->twig->addGlobal('route', $GLOBALS['router']->match());
+        $this->twig->addGlobal('params', $GLOBALS['router']->match()['params']);
 
         if ( $this->view )
             echo $this->twig->render($this->view);
